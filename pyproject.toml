@@ -1,0 +1,17 @@
+[project]
+name = "auth-service"
+version = "0.1.0"
+description = "Demo User Authentication Service"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110.0",
+    "pydantic>=2.0.0",
+    "uvicorn>=0.28.0",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["."]
