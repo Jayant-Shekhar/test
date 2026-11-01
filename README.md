@@ -1,22 +1,36 @@
-# User Authentication Service (`test`)
+# test — service toolkit with an open bug backlog
 
-A microservice providing authentication and user management APIs, used as a target service for **AgentOps**.
+A small Python service (FastAPI auth endpoints) plus a toolkit of utility modules. It is the
+target repository for **AgentOps**: every open GitHub issue describes one real bug, reproduced
+by exactly one failing test, so each issue can be investigated, fixed and shipped as its own PR.
 
-## Architecture & Endpoints
+## Layout
 
-- `GET /health` - Service health status check
-- `POST /login` - User authentication (accepts `username`, `password`)
-- `GET /users/me` - Profile lookup
+| Module | What it does |
+| --- | --- |
+| `app/main.py` | Auth service: `/health`, `/login`, `/users/me` |
+| `app/text.py` | Slugs, truncation, casing, masking |
+| `app/numbers.py` | Rounding, statistics, number theory |
+| `app/collections_utils.py` | Chunking, grouping, merging collections |
+| `app/dates.py` | Calendar math, business days, durations |
+| `app/validators.py` | Email, URL, phone, card and ID validation |
+| `app/pricing.py` | Discounts, tax, shipping, loans (Decimal money) |
+| `app/inventory.py` | Stock levels, reservations, FIFO allocation |
+| `app/search.py` | Pagination, sorting, filtering, search |
+| `app/security.py` | Sanitizing, hashing, tokens, rate limiting |
+| `app/parsing.py` | CSV, query strings, sizes, versions, numerals |
 
-## Known Seeded Bug
+Every function documents its contract in its docstring; tests in `tests/test_<module>.py`
+have one test per function (`test_<function>`).
 
-In `app/main.py`:
-- When invalid credentials are submitted to `/login`, the endpoint currently returns HTTP 200 with an error object instead of raising an `HTTPException(status_code=401, detail="Invalid credentials")`.
-- Automated test `tests/test_api.py::test_login_invalid_password` catches this failure and expects HTTP 401.
-
-## Running Tests
+## Running tests
 
 ```bash
 pip install -r requirements.txt
-pytest
+pytest                                   # whole suite
+pytest tests/test_text.py::test_slugify  # one issue's test
 ```
+
+The suite is expected to fail until the backlog is cleared: each open issue names the test
+that reproduces it. A fix for an issue should make its test pass without breaking any other
+test.
