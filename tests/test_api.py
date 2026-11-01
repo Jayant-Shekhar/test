@@ -1,6 +1,5 @@
 """Automated test suite for User Authentication Service."""
 
-import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 
@@ -28,11 +27,7 @@ def test_login_success():
 
 
 def test_login_invalid_password():
-    """
-    Verify invalid credentials MUST return HTTP 401 Unauthorized.
-    
-    (Target test failing due to bug in app/main.py returning HTTP 200)
-    """
+    """Verify invalid credentials return HTTP 401 Unauthorized."""
     response = client.post(
         "/login",
         json={"username": "alice", "password": "wrong_password_attempt"},

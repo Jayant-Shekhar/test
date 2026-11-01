@@ -33,13 +33,12 @@ def health_check():
 def login(request: LoginRequest):
     """
     Authenticate user with username and password.
-    
+
     Returns JWT mock token on success.
     Throws 401 Unauthorized on invalid credentials.
     """
-    # BUG: Currently returns 200 OK with error payload instead of raising HTTPException(401)
     if request.username not in USER_DATABASE or USER_DATABASE[request.username] != request.password:
-        return {"token": None, "error": "Invalid credentials"}
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
     return {
         "token": f"jwt_mock_token_for_{request.username}",
